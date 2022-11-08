@@ -7,9 +7,12 @@ from .models import Article, Tag, Scope
 
 class RelationshipInlineFormset(BaseInlineFormSet):
     def clean(self):
+        counter = 0
         for form in self.forms:
-            if not form.cleaned_data:
-                raise ValidationError('Тут всегда ошибка')
+            if form.cleaned_data.get('is_main'):
+                counter += 1
+        if counter is not 1:
+            raise ValidationError('Тут всегда ошибка')
         return super().clean()
 
 
